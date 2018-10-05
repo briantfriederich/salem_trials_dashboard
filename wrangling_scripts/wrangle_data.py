@@ -70,14 +70,41 @@ def return_figures():
     """
 
     graph_one = []
+    df = cleanparrisdf('data/Salem-Village-Data-Set.csv')
+    sources = [0,0,0,1,1,1]
+    targets = [2,3,4,2,3,4]
+    values = df["petition_count"].tolist()
+
+    data_one = dict(
+        type = 'sankey',
+        node = dict(
+            pad = 10,
+            thickness = 30,
+            line = dict(
+                color = "black",
+                width = 0.5
+            ),
+            label = ["Church Member", "Non-Church Member", "Anti-Parris Signatory", "Non-Signatory", "Pro-Parris Signatory"],
+            color = ["red", "blue", "black", "grey", "white"]
+        ),
+        link = dict(
+            source = sources,
+            target = targets,
+            value = values
+        ))
+
+    layout_one = dict(
+        title = 'Salem Residents\' Stance on Minister Samuel Parris in 1695'
+    )
+
+# second chart plots ararble land for 2015 as a bar chart
+    graph_two = []
     df = cleantimelinedf('data/Accused-Witches-Data-Set.csv')
-    lineslist = ["accusation_count", "execution_count"]
     x_val = df["month"].tolist()
     y_val1 = df["accusation_count"].tolist()
     y_val2 = df["execution_count"].tolist()
 
-
-    graph_one.append(
+    graph_two.append(
       go.Scatter(
       x = x_val,
       y = y_val1,
@@ -85,7 +112,7 @@ def return_figures():
       name = "People Accused of Witchcraft"
       )
     )
-    graph_one.append(
+    graph_two.append(
       go.Scatter(
       x = x_val,
       y = y_val2,
@@ -96,45 +123,45 @@ def return_figures():
 
     labels = ["February", "March", "April", "May", "June", "July", "August", "September", "October", "November"]
 
-    layout_one = dict(title = 'Salem Witch Trial Victim Count Over Time',
+    layout_two = dict(title = 'Salem Witch Trial Victim Count Over Time',
                 xaxis = dict(title = 'Month (1692)', tickvals=[k+2 for k in range(len(labels))], ticktext=labels, tickangle=315),
                 yaxis = dict(title = 'Number of People'),
-                )
-
-# second chart plots ararble land for 2015 as a bar chart
-    graph_two = []
-    df = cleanplacesdf('data/Accused-Witches-Data-Set.csv')
-    graph_two.append(
-      go.Bar(
-      x = ['a', 'b', 'c', 'd', 'e'],
-      y = [12, 9, 7, 5, 1],
-      )
-    )
-
-    layout_two = dict(title = 'Chart Two',
-                xaxis = dict(title = 'x-axis label',),
-                yaxis = dict(title = 'y-axis label'),
                 )
 
 
 # third chart plots percent of population that is rural from 1990 to 2015
     graph_three = []
-    df = cleanplacesdf('data/Salem-Village-Data-Set.csv')
+    df = cleanplacesdf('data/Accused-Witches-Data-Set.csv')
     graph_three.append(
-      go.Scatter(
-      x = [5, 4, 3, 2, 1, 0],
-      y = [0, 2, 4, 6, 8, 10],
-      mode = 'lines'
-      )
+        go.Scattergeo(
+            lon = df['long'],
+            lat = df['lat'],
+            text = df['residence'],
+            marker = dict(
+                size = df['places_count'],
+                sizeref = 2. * max(df['places_count'])/100,
+                color = 'red',
+                line = dict(width = 0 )
+            )
+        )
     )
 
-    layout_three = dict(title = 'Chart Three',
-                xaxis = dict(title = 'x-axis label'),
-                yaxis = dict(title = 'y-axis label')
-                       )
+    layout_three = dict(
+        title = 'Towns Affected (Bubbles Proportional to Number Accused)',
+        geo = dict(
+            showframe = False,
+            projection=dict( type='orthographic' ),
+            showland = True,
+            oceancolor = 'rgb(204, 255, 255)',
+            showocean= True,
+            landcolor = 'rgb(229, 255, 204)',
+            lonaxis = dict( range= [-71.7 , -70.3] ),
+            lataxis = dict( range= [42.3, 43.5] )
+        )
+    )
 
     figures = []
-    figures.append(dict(data=graph_one, layout=layout_one))
+    figures.append(dict(data=[data_one], layout=layout_one))
     figures.append(dict(data=graph_two, layout=layout_two))
     figures.append(dict(data=graph_three, layout=layout_three))
 
