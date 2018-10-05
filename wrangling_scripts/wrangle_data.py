@@ -9,6 +9,22 @@ def cleanplacesdf(dataset):
     places = df.groupby(["residence"])["residence"].count()
     places = places.to_frame("places_count").reset_index()
 
+    longlatdf = {' Amesbury ':[42.8584, -70.9300], ' Andover ':[42.6583, -71.1368],
+                 ' Beverly ':[42.5584, -70.8800], ' Billerica ':[42.5584, -71.2689],
+                 ' Boston ':[42.3601, -71.0589], ' Boxford ':[42.6612, -70.9967],
+                 ' Charlestown ':[42.3782, -71.0602], ' Chelmsford ':[42.5998, -71.3673],
+                 ' Gloucester ':[42.6159, -70.6620], ' Haverhill ':[42.7762, -71.0773],
+                 ' Ipswich ':[42.6792, -70.8412], ' Lynn ':[42.4668, -70.9495],
+                 ' Malden ':[42.4251, -71.0662], ' Manchester ':[42.5778, -70.7676],
+                 ' Marblehead ':[42.5000, -70.8578], ' Piscataqua, Maine ':[43.0881, -70.7361],
+                 ' Reading ':[42.5257, -71.0953], ' Rowley ':[42.7167, -70.8787],
+                 ' Salem Town ':[42.5195, -70.8967], ' Salem Village ':[42.5750, -70.9321],
+                 ' Salisbury ':[42.8417, -70.8606], ' Topsfield ':[42.6376, -70.9495],
+                 ' Wells, Maine ':[43.3222, -70.5805], ' Woburn ':[42.4793, -71.1523]}
+
+    places['longlat'] = places['residence'].map(longlatdf)
+    places[['long', 'lat']] = pd.DataFrame(places.longlat.values.tolist(), index=places.index)
+
     return places
 
 
@@ -36,6 +52,9 @@ def cleantimelinedf(dataset):
 def cleanparrisdf(dataset, keepcolumns = ["Petition", "Church to 1696"]):
     df = pd.read_csv(dataset)
     df = df[keepcolumns]
+    df.columns = ["name", "petition", "church"]
+    df = df.groupby(["church", "petition"])["name"].count()
+    df = df.to_frame("petition_count").reset_index()
 
     return df
 
