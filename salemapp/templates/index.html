@@ -41,13 +41,13 @@
     <div class="row ml-1 mt-2">
       <div class="col-1">
         <a href="https://medium.com/@briantfriederich">
-          <img class="mb-3 img-fluid" src="assets/mediumlogo.png" alt="medium logo">
+          <img class="mb-3 img-fluid" src="/static/img/mediumlogo.png" alt="medium logo">
         </a>
         <a href="https://github.com/briantfriederich">
-          <img class="mb-3 img-fluid" src="assets/githublogo.png" alt="github logo">
+          <img class="mb-3 img-fluid" src="/static/img/githublogo.png" alt="github logo">
         </a>
         <a href="https://www.linkedin.com/in/briantfriederich/">
-          <img class="img-fluid" src="assets/linkedinlogo.png" alt="linkedin logo">
+          <img class="img-fluid" src="/static/img/linkedinlogo.png" alt="linkedin logo">
         </a>
 
       </div>
@@ -57,17 +57,23 @@
         <h4 class="mb-4 text-muted">Visualizing the Social Dimensions of the Salem Witch Trials</h4>
 
         <div class="container">
-                    <div class="row mb-3">
+          <div class="row mb-3">
             <div class="col-12">
-              <img class="img-fluid" src="assets/plot1.png" alt="map one">
+              <div id="chart1">
+                <div id="{{ids[0]}}"></div>
+              </div>
             </div>
           </div>
           <div class="row">
             <div class="col-6">
-              <img class="img-fluid" src="assets/plot2.png" alt="chart two">
+              <div id="chart2">
+                <div id="{{ids[1]}}"></div>
+              </div>
             </div>
             <div class="col-6">
-              <img class="img-fluid" src="assets/plot3.png" alt="chart three">
+              <div id ="chart3">
+                <div id="{{ids[2]}}"></div>
+              </div>
             </div>
           </div>
 
@@ -81,4 +87,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </body>
+
+  <footer>
+
+    <script type="text/javascript">
+        // plots the figure with id
+        // id much match the div id above in the html
+        var figures = {{figuresJSON | safe}};
+        var ids = {{ids | safe}};
+        for(var i in figures) {
+            Plotly.plot(ids[i],
+                figures[i].data,
+                figures[i].layout || {});
+        }
+    </script>
+
+</footer>
+
 </html>
