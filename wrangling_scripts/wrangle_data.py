@@ -51,23 +51,35 @@ def return_figures():
     """
 
     graph_one = []
-    df = cleanplacesdf('data/Accused-Witches-Data-Set.csv')
+    df = cleantimelinedf('data/Accused-Witches-Data-Set.csv')
     lineslist = ["accusation_count", "execution_count"]
-    for line in lineslist:
-        x_val = df["month"].variable_x.tolist()
-        y_val = df[line].variable_y.tolist()
+    x_val = df["month"].tolist()
+    y_val1 = df["accusation_count"].tolist()
+    y_val2 = df["execution_count"].tolist()
+
+
     graph_one.append(
       go.Scatter(
       x = x_val,
-      y = y_val,
-      mode = 'lines',
-      name = line
+      y = y_val1,
+      mode = 'lines+markers',
+      name = "People Accused of Witchcraft"
+      )
+    )
+    graph_one.append(
+      go.Scatter(
+      x = x_val,
+      y = y_val2,
+      mode = 'lines+markers',
+      name = "People Executed for Witchcraft"
       )
     )
 
-    layout_one = dict(title = 'Chart One',
-                xaxis = dict(title = 'x-axis label'),
-                yaxis = dict(title = 'y-axis label'),
+    labels = ["February", "March", "April", "May", "June", "July", "August", "September", "October", "November"]
+
+    layout_one = dict(title = 'Salem Witch Trial Victim Count Over Time',
+                xaxis = dict(title = 'Month (1692)', tickvals=[k+2 for k in range(len(labels))], ticktext=labels, tickangle=315),
+                yaxis = dict(title = 'Number of People'),
                 )
 
 # second chart plots ararble land for 2015 as a bar chart
