@@ -24,6 +24,7 @@ def cleanplacesdf(dataset):
 
     places['longlat'] = places['residence'].map(longlatdf)
     places[['long', 'lat']] = pd.DataFrame(places.longlat.values.tolist(), index=places.index)
+    places['text'] = places['places_count'].map(str) + " accused in" + places['residence']
 
     return places
 
@@ -136,7 +137,7 @@ def return_figures():
         go.Scattergeo(
             lon = df['long'],
             lat = df['lat'],
-            text = df['residence'],
+            text = df['text'],
             marker = dict(
                 size = df['places_count'],
                 sizeref = 2. * max(df['places_count'])/100,
